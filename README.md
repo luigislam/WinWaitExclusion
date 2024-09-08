@@ -1,15 +1,35 @@
-myExclusionCls := WinWaitExclusionClass() ; this will initialize the Class and the Exclusions. Recommended to do so right before running your Apps.
-; myExclusionCls.Exclusions := WinGetList() ; This is basically what it does to initialize itself. It just grabs all your current windows to not match with them by accident.
+### License
+MIT License. Do whatever you want with this script.
 
-Run "Notepad" ; run your aoos
+### What is this Library for?
+This is designed to cover for the flaws of AHK's RunWait and WinWait functions.
+RunWait fails when it comes to dealing with executables that open multiple windows since it only waits and grabs the ID of the 1st window and doesn't account more windows.
+WinWait fails when these new windows having matching WinTitles with your pre-existing windows.
+This Class will cover for RunWait and WinWait's flaws by having its own WinWait function that maintains an Array of Window IDs to ignore duplicate matches and some small tools for copying/deleting the Array values.
+
+### Explanation on usage
+1. Initialize the Class first.
+2. Run your Apps normally via the Run Function
+3. Use your Class.WinWait() or Class.WinWaitArray() methods to get the ID of the windows that will be appearing.
+4. Done.
+
+### Example
+```
+myExclusionCls := WinWaitExclusionClass() ; this will initialize the Class and the Exclusions. Recommended to do so right before running your Apps.
+; myExclusionCls.Exclusions := WinGetList() ; This is basically what it does to initialize itself. It just grabs all your current existing windows.
+
+; run your apps
+Run "Notepad"
 Run "Notepad"
 Run "Chrome"
 
-; Grabs the ID of the WinTitles that will be showing up.
-myNotepadIDArray := myExclusionCls.WinWaitArray("ahk_exe Notepad.exe", 2) ; Waits for 2 of these Windows and then returns their ID in an Array then shoves it into Exclusions.
-myChromeID := myExclusionCls.WinWait("ahk_exe Chrome.exe") ; Returns the ID of this Window and shoves it into Exclusions.
+; Wait to Return the ID of the matching WinTitles that will be showing up.
+; The WinWait/WinWaitArray methods uses the Exclusions initialized before you ran your Apps so they don't pickup pre-existing matching windows by accident.
+; Any windows found by these 2 methods will be automatically added into the Exclusions so there aren't duplicate matches.
+myChromeID := myExclusionCls.WinWait("ahk_exe Chrome.exe") ; Returns the ID of this Window.
+myNotepadIDArray := myExclusionCls.WinWaitArray("ahk_exe Notepad.exe", 2) ; Waits for 2 of these Windows and then returns their ID in an Array.
 
-; Do whatever action with those IDs now that we have them.
+; Do whatever action with those IDs that you were going to use them for
 For Index, Value in myNotepadIDArray {
     Sleep 1000
     WinClose Value
@@ -19,8 +39,9 @@ WinClose myChromeID
 
 ; We can copy values into an Array.
 myNewArray := []
-myExclusionCls.CopyArrayValues(myNewArray, myChromeID, myNotepadIDArray) ; The 1st Parameter's Array will receive the values from all the next Parameters Array/Values.
+myExclusionCls.CopyArrayValues(myNewArray, myChromeID, myNotepadIDArray) ; The 1st Parameter's Array will receive the values from the following Parameters' Array/Values.
 
-; I have a Method to remove values from the Exclusions property directly and another Method that removes values from Array placed in the 1st Parameter.
-myExclusionCls.DeleteExclusionValues(myChromeID, myNotepadIDArray) ; shove whatever Array/Values into this Method to remove them from the Exclusions.
-myExclusionCls.DeleteArrayValues(myNewArray, myChromeID, myNotepadIDArray) ; The 1st parameter will remove any values that match what is in the 2nd parameter and so on.
+; We can delete values from an Array
+myExclusionCls.DeleteArrayValues(myNewArray, myChromeID, myNotepadIDArray) ; The 1st Parameter's Array will lose any values that match from the following Parameter's Array/Values
+myExclusionCls.DeleteExclusionValues(myChromeID, myNotepadIDArray) ; This is just to directly delete values from the Exclusions property for simplicity.
+```
