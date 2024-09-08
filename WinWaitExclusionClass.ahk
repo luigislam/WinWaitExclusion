@@ -43,15 +43,16 @@ Class WinWaitExclusionClass {
         For pIndex, pTypeValue in ParamVariadic {
             If Type(pTypeValue) = "Integer"
                 DeleteArray.Push(pTypeValue)
-            If Type(pTypeValue) = "Array"
+            Else If Type(pTypeValue) = "Array"
                 For Index, Value in pTypeValue
                     DeleteArray.Push(Value)
         }
         IndexSubtracted := 0
-        For eIndex, eValue in this.Exclusions {
+        Loop this.Exclusions.Length {
+            CurrentIndex := A_Index - IndexSubtracted
             For dIndex, dValue in DeleteArray {
-                If this.Exclusions[eIndex-IndexSubtracted] = dValue{
-                    this.Exclusions.RemoveAt(eIndex-IndexSubtracted)
+                If this.Exclusions[CurrentIndex] = dValue{
+                    this.Exclusions.RemoveAt(CurrentIndex)
                     IndexSubtracted += 1
                     break
                 }
@@ -65,15 +66,16 @@ Class WinWaitExclusionClass {
         For pIndex, pTypeValue in ParamVariadic {
             If Type(pTypeValue) = "Integer"
                 DeleteArray.Push(pTypeValue)
-            If Type(pTypeValue) = "Array"
+            Else If Type(pTypeValue) = "Array"
                 For Index, Value in pTypeValue
                     DeleteArray.Push(Value)
         }
         IndexSubtracted := 0
-        For eIndex, eValue in EditArray {
+        Loop EditArray.Length {
+            CurrentIndex := A_Index - IndexSubtracted
             For dIndex, dValue in DeleteArray {
-                If EditArray[eIndex-IndexSubtracted] = dValue{
-                    EditArray.RemoveAt(eIndex-IndexSubtracted)
+                If EditArray[CurrentIndex] = dValue{
+                    EditArray.RemoveAt(CurrentIndex)
                     IndexSubtracted += 1
                     break
                 }
@@ -86,7 +88,7 @@ Class WinWaitExclusionClass {
         For pIndex, pTypeValue in ParamVariadicToCopy {
             If Type(pTypeValue) = "Integer"
                 CopyArray.Push(pTypeValue)
-            If Type(pTypeValue) = "Array"
+            Else If Type(pTypeValue) = "Array"
                 For Index, Value in pTypeValue
                     CopyArray.Push(Value)
         }
