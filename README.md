@@ -2,9 +2,9 @@
 MIT License. Do whatever you want with this script.
 
 ### What is this Library for?
-This Class will cover for RunWait and WinWait's flaws by having its own WinWait function that maintains an Array of Window IDs to ignore duplicate matches and some small tools for copying/deleting the Array values.  
+This Class will cover for RunWait's flaws by having its own WinWait function that maintains an Array of Window IDs to ignore duplicate matches and some small tools for copying/deleting the Array values.  
 * AHK's built-in RunWait fails when it comes to dealing with executables that open multiple windows since it only waits and grabs the ID of the 1st window and doesn't account more windows.  
-* AHK's built-in WinWait fails when these new windows having matching WinTitles with your pre-existing windows.  
+* AHK's built-in WinWait will match your pre-existing windows so it doesn't replace RunWait.
 
 ### Simple Explanation on usage
 1. Initialize the Class first.
