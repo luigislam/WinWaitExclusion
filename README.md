@@ -2,14 +2,15 @@
 MIT License. Do whatever you want with this script.
 
 ### What is this Library for?
-This Class will cover for RunWait's flaws by having its own WinWait function that maintains an Array of Window IDs to ignore duplicate matches and some small tools for copying/deleting the Array values.  
+This Class is a workaround for RunWait's inability to handle an executable that opens multiple windows. 
+The code in this class basically just imitates WinWait while maintaining a list of window IDs to exclude. The WinWait method in this class will add found windows to the exclusion.  
 * AHK's built-in RunWait fails when it comes to dealing with executables that open multiple windows since it only waits and grabs the ID of the 1st window and doesn't account more windows.  
-* AHK's built-in WinWait will match your pre-existing windows which makes it fail to replace RunWait.
+* AHK's built-in WinWait will match your pre-existing windows which is why this class builds a list of windows to exclude matching with.
 
 ### Simple Explanation on usage
-1. Initialize the Class first.
-2. Run your Apps via the Run Function.
-3. Use your Class.WinWait() or Class.WinWaitArray() methods to get the ID of the windows that will be appearing.
+1. Initialize the Class first right before you run your App.
+2. Run your App.
+3. Use the Class.WinWait() or Class.WinWaitArray() methods to get the ID of the windows that will be appearing.
 4. Done.
 
 ### Example
@@ -17,7 +18,7 @@ This Class will cover for RunWait's flaws by having its own WinWait function tha
 myExclusionCls := WinWaitExclusionClass() ; this will initialize the Class and the Exclusions. Recommended to do so right before running your Apps.
 ; myExclusionCls.Exclusions := WinGetList() ; This is basically what it does to initialize itself. It just grabs all your current existing windows.
 
-; run your apps
+; run your executable that opens multiple windows.
 Run "Notepad"
 Run "Notepad"
 Run "Chrome"
