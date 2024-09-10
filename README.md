@@ -13,27 +13,7 @@ The code in this class basically just imitates WinWait while maintaining a list 
 3. Use the Run Function to run your Executable.
 4. Use the Class.WinWait() or Class.WinWaitArray() methods to get the ID of the windows that will be appearing.
 
-### Example 1
-```
-; initialize the class into a Variable
-WWE := WinWaitExclusionClass()
-
-; Use Variable.Start() to initialize the existing list of Windows to be excluded from matching.
-WWE.Start()
-; run your executable that opens multiple windows.
-Run "Notepad"
-Run "Notepad"
-Run "Chrome"
-Run "Notepad"
-
-; Use Variable.WinWait() or Variable.WinWaitArray() to grab the IDs of the windows that will be appearing.
-myNotepadWindowList := WWE.WinWaitArray("ahk_exe Notepad.exe", 3) ; waits for 3 new notepad windows before continuing
-Msgbox "Found " myNotepadWindowList.Length " Notepad Windows",, 0x1000
-myChromeWindow := WWE.WinWait("ahk_exe chrome.exe") ; waits for 1 new chrome window before continuing
-Msgbox "Found " WinGetTitle(myChromeWindow),, 0x1000
-```
-
-### Example 2
+### Example 1: Matching any newly existing Window for the next 3 seconds.
 ```
 F1:: Run "Notepad" ; Pressing the F1 hotkey will open a new Notepad window.
 
@@ -50,4 +30,27 @@ For Index, Value in myFoundList { ; perform code for each window inside the List
     If WinExist(Value) ; checks if the window exists first and then...
         WinClose() ; closes the window
 }
+ExitApp ; closes the script
+```
+
+### Example 2: Finding specific windows and storing them into Variables/Arrays
+```
+; initialize the class into a Variable
+WWE := WinWaitExclusionClass()
+
+; Use Variable.Start() to initialize the existing list of Windows to be excluded from matching.
+WWE.Start()
+
+; run your executable that opens multiple windows.
+Run "Notepad"
+Run "Notepad"
+Run "MsPaint"
+Run "Notepad"
+
+; Use Variable.WinWait() or Variable.WinWaitArray() to grab the IDs of specific windows that will be appearing.
+myNotepadWindowArray := WWE.WinWaitArray("ahk_exe Notepad.exe", 3) ; waits for 3 new notepad windows before continuing
+Msgbox "Found " myNotepadWindowArray.Length " Notepad Windows",, 0x1000
+myMSPaintWindow := WWE.WinWait("ahk_exe msPaint.exe") ; waits for 1 new MsPaint window before continuing
+Msgbox "Found " WinGetTitle(myMSPaintWindow),, 0x1000
+ExitApp ; closes the script
 ```
