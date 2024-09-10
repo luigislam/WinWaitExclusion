@@ -1,81 +1,57 @@
 Class WinWaitExclusionClass {
-    __New(){
-        this.Exclusions := WinGetList()
-    }
-    
-    Exclusions := []
+    ExclusionList := []
 
-    WinWait(ParamWinTitle){
+    Start(){
+        this.ExclusionList := WinGetList()
+    }
+
+    WinWait(WinTitle:="", TimeOutSeconds:=false){
+        EndTime := A_TickCount + (TimeOutSeconds * 1000)
         Loop {
-            CheckingArray := WinGetList(ParamWinTitle)
-            this.DeleteArrayValues(CheckingArray, this.Exclusions)
+            If TimeOutSeconds and (A_TickCount > EndTime)
+                Return false
+            CheckingArray := WinGetList(WinTitle)
+            this.DeleteArrayValues(CheckingArray, this.ExclusionList)
             If CheckingArray.Length {
-                this.CopyArrayValues(this.Exclusions, CheckingArray)
+                this.CopyArrayValues(this.ExclusionList, CheckingArray)
                 Return CheckingArray[1]
             }
         }
     }
 
-    WinWaitArray(ParamWinTitle, ParamCount){
+    WinWaitArray(WinTitle:="", WindowCount:=1, TimeOutSeconds:=false){
+        EndTime := A_TickCount + (TimeOutSeconds * 1000)
         CompiledArray := []
         Loop {
-            CheckingArray := WinGetList(ParamWinTitle)
-            this.DeleteArrayValues(CheckingArray, this.Exclusions)
+            If TimeOutSeconds and (A_TickCount > EndTime)
+                Return CompiledArray
+            CheckingArray := WinGetList(WinTitle)
+            this.DeleteArrayValues(CheckingArray, this.ExclusionList)
             this.DeleteArrayValues(CheckingArray, CompiledArray)
             If CheckingArray.Length {
                 For Index, Value in CheckingArray {
                     CompiledArray.Push(Value)
                 }
             }
-            If CompiledArray.Length > ParamCount {
+            If CompiledArray.Length > WindowCount {
                 Throw "Error Bruh"
             }
-            Else If CompiledArray.Length = ParamCount {
-                this.CopyArrayValues(this.Exclusions, CompiledArray)
+            Else If CompiledArray.Length = WindowCount {
+                this.CopyArrayValues(this.ExclusionList, CompiledArray)
                 Return CompiledArray
             }
             Sleep 1
         }
-    }
+    } 
 
-    DeleteExclusionValues(ParamVariadic*){
-        DeleteArray := []
-        For pIndex, pTypeValue in ParamVariadic {
-            If Type(pTypeValue) = "Integer"
-                DeleteArray.Push(pTypeValue)
-            Else If Type(pTypeValue) = "Array"
-                For Index, Value in pTypeValue
-                    DeleteArray.Push(Value)
-        }
+    DeleteArrayValues(DeleteInThisArray, VariadicArrayValues*){
+        DeleteList := this.MergeVariadicValues(VariadicArrayValues)
         IndexSubtracted := 0
-        Loop this.Exclusions.Length {
+        Loop DeleteInThisArray.Length {
             CurrentIndex := A_Index - IndexSubtracted
-            For dIndex, dValue in DeleteArray {
-                If this.Exclusions[CurrentIndex] = dValue{
-                    this.Exclusions.RemoveAt(CurrentIndex)
-                    IndexSubtracted += 1
-                    break
-                }
-            }
-        }
-    }
-      
-
-    DeleteArrayValues(EditArray, ParamVariadic*){
-        DeleteArray := []
-        For pIndex, pTypeValue in ParamVariadic {
-            If Type(pTypeValue) = "Integer"
-                DeleteArray.Push(pTypeValue)
-            Else If Type(pTypeValue) = "Array"
-                For Index, Value in pTypeValue
-                    DeleteArray.Push(Value)
-        }
-        IndexSubtracted := 0
-        Loop EditArray.Length {
-            CurrentIndex := A_Index - IndexSubtracted
-            For dIndex, dValue in DeleteArray {
-                If EditArray[CurrentIndex] = dValue{
-                    EditArray.RemoveAt(CurrentIndex)
+            For dIndex, dValue in DeleteList {
+                If DeleteInThisArray[CurrentIndex] = dValue{
+                    DeleteInThisArray.RemoveAt(CurrentIndex)
                     IndexSubtracted += 1
                     break
                 }
@@ -83,16 +59,20 @@ Class WinWaitExclusionClass {
         }
     }
 
-    CopyArrayValues(ReceivingArray, ParamVariadicToCopy*){
-        CopyArray := []
-        For pIndex, pTypeValue in ParamVariadicToCopy {
+    CopyArrayValues(CopyToThisArray, VariadicArrayValues*){
+        For Index, Value in this.MergeVariadicValues(VariadicArrayValues)
+            CopyToThisArray.Push(Value)
+    }
+
+    MergeVariadicValues(InsertVariadicArray){
+        ReturnList := []
+        For pIndex, pTypeValue in InsertVariadicArray {
             If Type(pTypeValue) = "Integer"
-                CopyArray.Push(pTypeValue)
+                ReturnList.Push(pTypeValue)
             Else If Type(pTypeValue) = "Array"
                 For Index, Value in pTypeValue
-                    CopyArray.Push(Value)
+                    ReturnList.Push(Value)
         }
-        For Index, Value in CopyArray
-            ReceivingArray.Push(Value)
+        Return ReturnList
     }
 }
