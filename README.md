@@ -35,7 +35,6 @@ ExitApp ; closes the script
 
 ### Example 2: Finding specific windows and storing them into Variables/Arrays
 ```
-; initialize the class into a Variable
 WWE := WinWaitExclusionClass()
 
 ; Use Variable.Start() to initialize the existing list of Windows to be excluded from matching.
@@ -44,13 +43,21 @@ WWE.Start()
 ; run your executable that opens multiple windows.
 Run "Notepad"
 Run "Notepad"
-Run "MsPaint"
 Run "Notepad"
+Run "MsPaint"
 
-; Use Variable.WinWait() or Variable.WinWaitArray() to grab the IDs of specific windows that will be appearing.
+; Use Variable.WinWait() or Variable.WinWaitArray() to grab the IDs of the windows that will be appearing.
 myNotepadWindowArray := WWE.WinWaitArray("ahk_exe Notepad.exe", 3) ; waits for 3 new notepad windows before continuing
-Msgbox "Found " myNotepadWindowArray.Length " Notepad Windows",, 0x1000
 myMSPaintWindow := WWE.WinWait("ahk_exe msPaint.exe") ; waits for 1 new MsPaint window before continuing
-Msgbox "Found " WinGetTitle(myMSPaintWindow),, 0x1000
+Msgbox "Found " myNotepadWindowArray.Length " Notepad windows"
+Msgbox "Found 1 MsPaint window named... " WinGetTitle(myMSPaintWindow)
+
+For Index, Value in myNotepadWindowArray ; perform code for each window in this Array
+    If WinExist(Value) ; if window exists...
+        WinClose ; close the window
+
+If WinExist(myMSPaintWindow) ; if window exists...
+    WinClose ; close the window
+
 ExitApp ; closes the script
 ```
