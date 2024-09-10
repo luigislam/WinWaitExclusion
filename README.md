@@ -8,40 +8,46 @@ The code in this class basically just imitates WinWait while maintaining a list 
 * AHK's built-in WinWait will match your pre-existing windows which is why this class builds a list of windows to exclude matching with.
 
 ### Simple Explanation on usage
-1. Initialize the Class first right before you run your App.
-2. Run your App.
-3. Use the Class.WinWait() or Class.WinWaitArray() methods to get the ID of the windows that will be appearing.
-4. Done.
+1. Initialize the Class to a Variable.
+2. Use class.Start() to initialize/reset the windows to exclude.
+3. Use the Run Function to run your Executable.
+4. Use the Class.WinWait() or Class.WinWaitArray() methods to get the ID of the windows that will be appearing.
 
-### Example
+### Example 1
 ```
-myExclusionCls := WinWaitExclusionClass() ; this will initialize the Class and the Exclusions. Recommended to do so right before running your Apps.
-; myExclusionCls.Exclusions := WinGetList() ; This is basically what it does to initialize itself. It just grabs all your current existing windows.
+; initialize the class into a Variable
+WWE := WinWaitExclusionClass()
 
+; Use Variable.Start() to initialize the existing list of Windows to be excluded from matching.
+WWE.Start()
 ; run your executable that opens multiple windows.
 Run "Notepad"
 Run "Notepad"
 Run "Chrome"
+Run "Notepad"
 
-; Wait to Return the ID of the matching WinTitles that will be showing up.
-; The WinWait/WinWaitArray methods uses the Exclusions initialized before you ran your Apps so they don't pickup pre-existing matching windows by accident.
-; Any windows found by these 2 methods will be automatically added into the Exclusions so there aren't duplicate matches.
-myChromeID := myExclusionCls.WinWait("ahk_exe Chrome.exe") ; Returns the ID of this Window.
-myNotepadIDArray := myExclusionCls.WinWaitArray("ahk_exe Notepad.exe", 2) ; Waits for 2 of these Windows and then returns their ID in an Array.
+; Use Variable.WinWait() or Variable.WinWaitArray() to grab the IDs of the windows that will be appearing.
+myNotepadWindowList := WWE.WinWaitArray("ahk_exe Notepad.exe", 3) ; waits for 3 new notepad windows before continuing
+Msgbox "Found " myNotepadWindowList.Length " Notepad Windows",, 0x1000
+myChromeWindow := WWE.WinWait("ahk_exe chrome.exe") ; waits for 1 new chrome window before continuing
+Msgbox "Found " WinGetTitle(myChromeWindow),, 0x1000
+```
 
-; Do whatever action with those IDs that you were going to use them for
-For Index, Value in myNotepadIDArray {
-    Sleep 1000
-    WinClose Value
+### Example 2
+```
+F1:: Run "Notepad" ; Pressing the F1 hotkey will open a new Notepad window.
+
+Suspend true ; disables the F1 Hotkey so its not usable at the start
+WWE := WinWaitExclusionClass() ; initialize the class
+Msgbox "Close this Msgbox and then press F1 to open Notepad windows."
+Suspend false ; enables the F1 Hotkey for use
+WWE.Start() ; initialize the exclusion of your pre-existing windows
+myFoundList := WWE.WinWaitArray(,, 3) ; this will find any new window within the next 3 seconds.
+Suspend true ; this is to disable the F1 Hotkey
+Msgbox "Found " myFoundList.Length " Windows.`nClosing this Msgbox will continue onto the next section of code that will delete the found windows"
+
+For Index, Value in myFoundList { ; perform code for each window inside the List
+    If WinExist(Value) ; checks if the window exists first and then...
+        WinClose() ; closes the window
 }
-Sleep 1000
-WinClose myChromeID
-
-; We can copy values into an Array.
-myNewArray := []
-myExclusionCls.CopyArrayValues(myNewArray, myChromeID, myNotepadIDArray) ; The 1st Parameter's Array will receive the values from the following Parameters' Array/Values.
-
-; We can delete values from an Array
-myExclusionCls.DeleteArrayValues(myNewArray, myChromeID, myNotepadIDArray) ; The 1st Parameter's Array will lose any values that match from the following Parameter's Array/Values
-myExclusionCls.DeleteExclusionValues(myChromeID, myNotepadIDArray) ; This is just to directly delete values from the Exclusions property for simplicity.
 ```
