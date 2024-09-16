@@ -16,14 +16,14 @@ The WinWait/WinWaitArray method in this class will add found windows to the excl
 
 ### Example 1: Matching any newly existing Window for the next 3 seconds.
 ```
-WWE := WinWaitExclusionClass() ; initialize the class
+WWE := WinWaitExclusionClass() ; initialize the class to a variable called "WWE"
 
 F1:: Run "Notepad" ; Pressing the F1 hotkey will open a new Notepad window.
 
 Suspend true ; disables the F1 Hotkey so we can't use it at the start of this script.
 Msgbox "Close this Msgbox and then press F1 to open Notepad windows."
 Suspend false ; enables the F1 Hotkey for use
-WWE.Start() ; initialize the exclusion of your pre-existing windows
+WWE.Start() ; grabs all currently existing windows to be excluded from future Variable.WinWait() methods
 myFoundList := WWE.WinWaitArray(,, 3) ; this will find any new window within the next 3 seconds.
 Suspend true ; this is to disable the F1 Hotkey
 Msgbox "Found " myFoundList.Length " Windows.`nClosing this Msgbox will continue onto the next section of code that will delete the found windows"
