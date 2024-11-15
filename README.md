@@ -1,6 +1,3 @@
-### License
-MIT License. Do whatever you want with this script.
-
 ### What is this Library for?
 This Class is a workaround for RunWait's inability to handle an executable that opens multiple windows.  
 The code in this class just imitates WinWait while maintaining an internal list of window IDs to exclude.  
