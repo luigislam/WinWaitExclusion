@@ -1,6 +1,6 @@
-Fn_WinWaitExclusion(WinTitle?, TimeOutinMilliseconds?){
+Fn_WinWaitExclusion(WinTitle?, TimeOutinMilliseconds?, ifTrue_ResetExclusion:=false){
     Static myExclusionMap := Map()
-    If !isSet(WinTitle){
+    If ifTrue_ResetExclusion{
         myExclusionMap := Map()
         For Index, Value in WinGetList()
             myExclusionMap[Value] := false
@@ -9,7 +9,7 @@ Fn_WinWaitExclusion(WinTitle?, TimeOutinMilliseconds?){
     Else {
         EndTime := A_TickCount + (TimeOutinMilliseconds??0)
         Loop {
-            For Index, Value in WinGetList(WinTitle)
+            For Index, Value in WinGetList(WinTitle?)
                 If !myExclusionMap.Has(Value) and (myExclusionMap[Value] := True)
                     Return Value
             If isSet(TimeOutinMilliseconds)
