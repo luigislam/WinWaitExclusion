@@ -14,8 +14,8 @@ WinWaitExclusion("ahk_exe notepad.exe") ; Step 3
 Msgbox "Done" ; This msgbox is only reached after a new Notepad window is found.
 ```
 
-### Example 1: Matching a new Notepad Window.
-```
+### Example 1: Matching a new Notepad Window and storing the ID into a Variable.
+```ahk
 WinWaitExclusion(,,True) ; initialize the exclusion list
 ; If you were using the Run Function, it would go here.
 myFoundID := WinWaitExclusion("ahk_exe Notepad.exe) ; matches any new window and stores the ID into the variable myFoundID.
@@ -23,8 +23,8 @@ Msgbox WinGetTitle(myFoundID) ; displays the window name of the found window
 }
 ```
 
-### Example 2: Matching the next 3 windows of any kind.
-```
+### Example 2: Matching and Displaying the next 3 windows of any kind.
+```ahk
 WinWaitExclusion(,,True) ; initialize the exclusion list
 Loop 3 {
     myFoundID := WinWaitExclusion() ; matches any new window and stores the ID into the variable myFoundID.
