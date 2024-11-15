@@ -4,9 +4,9 @@
 The Function waits for a new window to appear by creating and maintaing a list of windows to exclude matching against.
 
 ### Simple Explanation on usage
-1. Use WinWaitExclusion(,,True) to Initalize/Reset the Exclusion list to contain all your current existing windows
-2. If you're using AHK's Run function to run your app, do it now before Step 3.
-3. Use WinWaitExclusion(WinTitle, Timeout) to wait until your window is found. The Timeout parameter is optional. Omitting the WinTitle parameter will match any window.
+Step 1. Use WinWaitExclusion(,,True) to Initalize/Reset the Exclusion list to contain all your current existing windows
+Step 2. If you're using AHK's Run function to run your app, do it now before Step 3.
+Step 3. Use WinWaitExclusion(WinTitle, Timeout) to wait until your window is found. The Timeout parameter is optional. Omitting the WinTitle parameter will match any window.
 ```ahk
 WinWaitExclusion(,, True) ; Step 1
 Run "Notepad" ; Step 2
