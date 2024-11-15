@@ -1,5 +1,5 @@
 ### What is this Function for?
-The Function waits for a new matching window to appear by creating and maintaing a list of windows to exclude matching with.
+The Function waits for a new matching window to appear by creating and maintaing a list of windows to exclude matching against.
 * AHK's built-in WinWait will match any existing windows "indiscriminately" which is why I made this function so I can only match new windows.
 * AHK's built-in RunWait does not grab more than 1 window. This Function can catch any newly created window.
 
