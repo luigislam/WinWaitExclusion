@@ -1,4 +1,4 @@
-Fn_WinWaitExclusion(WinTitle?, TimeOutinMilliseconds?, ifTrue_ResetExclusion:=false){
+WinWaitExclusion(WinTitle?, TimeOutinMilliseconds?, ifTrue_ResetExclusion:=false){
     Static myExclusionMap := Map()
     If ifTrue_ResetExclusion{
         myExclusionMap := Map()
@@ -15,6 +15,7 @@ Fn_WinWaitExclusion(WinTitle?, TimeOutinMilliseconds?, ifTrue_ResetExclusion:=fa
             If isSet(TimeOutinMilliseconds)
                 If (TimeOutinMilliseconds = False) or (TimeOutinMilliseconds and (A_TickCount - EndTime > 0)) 
                     Break
+            Sleep 1
         }
     }
 }
