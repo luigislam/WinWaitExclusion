@@ -13,7 +13,7 @@ WinWaitExclusion(WinTitle?, TimeOutinMilliseconds?, ifTrue_ResetExclusion:=false
                 If !myExclusionMap.Has(Value) and (myExclusionMap[Value] := True)
                     Return Value
             If isSet(TimeOutinMilliseconds)
-                If (TimeOutinMilliseconds = False) or (TimeOutinMilliseconds and (A_TickCount - EndTime > 0)) 
+                If (TimeOutinMilliseconds = False) or (TimeOutinMilliseconds && (A_TickCount - EndTime > 0))
                     Break
             Sleep 1
         }
