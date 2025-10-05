@@ -10,7 +10,7 @@ For me personally, I use a program that creates multiple cmd windows that don't 
 ```ahk
 WinWaitExclusion(,, True) ; Step 1: Use WinWaitExclusion(,,True) to Initalize/Reset the Exclusion list to contain all your current existing windows
 Run "Notepad" ; Step 2: If you're using AHK's Run function to run your app, do it now before Step 3.
-WinWaitExclusion("ahk_exe notepad.exe") ; Step 3: Use WinWaitExclusion(WinTitle, Timeout) to wait until your window is found. The Timeout parameter is optional. Omitting the WinTitle parameter will match any window.
+WinWaitExclusion("ahk_exe notepad.exe") ; Step 3: Use WinWaitExclusion(WinTitle, Timeout) to wait until your window is found. The Timeout parameter is optional and uses Milliseconds as the time value. Omitting the WinTitle parameter will match any window.
 Msgbox "Done" ; This line is only reached after a new Notepad window is found or timed out.
 ```
 
