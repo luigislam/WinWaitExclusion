@@ -34,10 +34,10 @@ Loop 3 {
 
 ### Example 3: Matching a new Notepad window but without "pausing" at the line you used this function at.
 ```
-Fn_WinWaitExclusion(,, true) ; initializes a list of currently existing windows.
+WinWaitExclusion(,, true) ; initializes a list of currently existing windows.
 
 F1::{
-    FoundHWND := Fn_WinWaitExclusion("ahk_exe notepad.exe", 0) ; The 2nd parameter needs to be 0 so that this Function does not "pause" at this line.
+    FoundHWND := WinWaitExclusion("ahk_exe notepad.exe", 0) ; The 2nd parameter needs to be 0 so that this Function does not "pause" at this line.
     If FoundHWND
         MsgBox "HWND = " FoundHWND
     Else
